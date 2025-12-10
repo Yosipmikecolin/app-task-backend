@@ -11,7 +11,7 @@ export class Task {
   @Prop()
   description: string;
 
-  @Prop()
+  @Prop({ default: false })
   completed: boolean;
 
   @Prop({ default: Date.now })
