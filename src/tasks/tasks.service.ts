@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task } from './entities/task.entity';
 import { handleMongoError } from 'src/utils/handle-mongo-error.util';
+import { checkFound } from 'src/utils/check-found.util';
 
 @Injectable()
 export class TasksService {
@@ -27,8 +28,15 @@ export class TasksService {
     }
   }
 
-  update(id: number, updateTaskDto: UpdateTaskDto) {
-    return `This action updates a #${id} task`;
+  async update(id: string, updateTaskDto: UpdateTaskDto) {
+    try {
+      const updatedTask = await this.taskModel
+        .findByIdAndUpdate(id, updateTaskDto, { new: true })
+        .exec();
+      return checkFound(updatedTask, `Task with ID ${id} not found`);
+    } catch (error) {
+      throw handleMongoError(error);
+    }
   }
 
   remove(id: number) {
