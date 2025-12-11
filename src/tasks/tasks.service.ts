@@ -19,12 +19,12 @@ export class TasksService {
     }
   }
 
-  findAll() {
-    return `This action returns all tasks`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} task`;
+  async findAll() {
+    try {
+      return this.taskModel.find().exec();
+    } catch (error) {
+      throw handleMongoError(error);
+    }
   }
 
   update(id: number, updateTaskDto: UpdateTaskDto) {
