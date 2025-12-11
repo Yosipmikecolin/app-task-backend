@@ -1,98 +1,119 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 📘 API de Tareas (Backend)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Esta API de backend fue desarrollada como parte de la Prueba Técnica para CrediSeguros. Construida sobre el framework NestJS y utilizando MongoDB como base de datos, el proyecto implementa una arquitectura modular y escalable diseñada para la gestión eficiente de recursos.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🛠️ Tecnologías Utilizadas
 
-## Description
+El proyecto utiliza un stack moderno y robusto:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **[NestJS](https://nestjs.com/)** (v11): Framework de Node.js para construir aplicaciones del lado del servidor eficientes y escalables.
+- **[TypeScript](https://www.typescriptlang.org/)**: Lenguaje principal para tipado estático y mejor mantenibilidad.
+- **[MongoDB](https://www.mongodb.com/)**: Base de datos NoSQL para almacenamiento de documentos.
+- **[Mongoose](https://mongoosejs.com/)**: ODM (Object Data Modeling) para modelar datos de aplicación.
+- **[Docker](https://www.docker.com/)**: Para contenerización y orquestación de servicios locales.
+- **[pnpm](https://pnpm.io/)**: Gestor de paquetes rápido y eficiente.
+- **[Jest](https://jestjs.io/)**: Framework de pruebas para unit testing.
 
-## Project setup
+## 🏗️ Arquitectura y Estructura
 
-```bash
-$ pnpm install
-```
+El proyecto sigue la arquitectura modular recomendada por NestJS.
 
-## Compile and run the project
+### Estructura de Directorios
 
-```bash
-# development
-$ pnpm run start
+- `src/app.module.ts`: Módulo raíz de la aplicación. Configura la conexión a BD y variables de entorno.
+- `src/tasks`: Módulo de Tareas. Contiene toda la lógica de negocio relacionada con las tareas.
+  - `dto/`: Data Transfer Objects para validación de entrada (ej: crear tarea).
+  - `entities/`: Esquemas de Mongoose que definen la estructura en MongoDB.
+  - `tasks.controller.ts`: Maneja las peticiones HTTP.
+  - `tasks.service.ts`: Lógica de negocio e interacción con la base de datos.
+- `src/utils`: Utilidades generales.
+- `test/`: Pruebas unitarias.
 
-# watch mode
-$ pnpm run start:dev
+### Patrones de Diseño
 
-# production mode
-$ pnpm run start:prod
-```
+- **Inyección de Dependencias**: Core de NestJS para gestionar la instancia de servicios y controladores.
+- **Repository Pattern**: Implementado a través de Mongoose Models para abstraer la capa de datos.
+- **DTO (Data Transfer Object)**: Uso de `class-validator` y `class-transformer` para asegurar la integridad de los datos entrantes.
 
-## Run tests
+### Estructura del Esquema
 
 ```bash
-# unit tests
-$ pnpm run test
+@Schema()
+export class Task {
+  @Prop({ unique: true, required: true, index: true })
+  title: string;
 
-# e2e tests
-$ pnpm run test:e2e
+  @Prop({ required: true })
+  description: string;
 
-# test coverage
-$ pnpm run test:cov
+  @Prop({ default: false })
+  completed: boolean;
+
+  @Prop({ default: Date.now })
+  createdAt: Date;
+}
 ```
 
-## Deployment
+## 🚀 Instalación y Ejecución
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+### Requisitos Previos
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+- Node.js (v18+ recomendado)
+- pnpm (`npm install -g pnpm`)
+- Docker y Docker Compose (Opcional, pero recomendado para la BD)
+
+### Configuración para probar localmente
+
+1.  **Instalar dependencias**:
+
+    ```bash
+    pnpm install
+    ```
+
+2.  **Configurar Variables de Entorno**:
+    Asegúrate de tener un archivo `.env` en la raíz con la siguiente variable `MONGO_URL="mongodb://root:pass123@mongo:27017/mydb?authSource=admin"`).
+
+3.  **Construir y levantar contenedores:**
+    Para levantar todo el entorno (Aplicación + Base de Datos) sin configurar nada manualmente:
+
+    ```bash
+    docker compose build --no-cache
+    ```
+
+    ```bash
+    docker compose up -d
+    ```
+
+4.  **Ejecutar la aplicación**:
+
+    ```bash
+    pnpm run start:dev
+    ```
+
+5.  La API estará disponible en `http://localhost:3000`.
+
+### Configuración para probar Online
+
+Si deseas puedes probar la API que se encuentra desplegada en la siguiente **URL**
+
+https://app-task-backend-production.up.railway.app
+
+## 🧪 Testing
+
+El proyecto incluye pruebas unitarias.
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+# Ejecutar pruebas unitarias
+pnpm run test
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## 📡 Endpoints Principales
 
-## Resources
+La API expone los siguientes recursos base (Tasks):
 
-Check out a few resources that may come in handy when working with NestJS:
+- `GET /tasks`: Obtener todas las tareas.
+- `POST /tasks`: Crear una nueva tarea.
+- `PUT /tasks/:id`: Actualizar una tarea existente.
+- `DELETE /tasks/:id`: Eliminar una tarea.
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+---
