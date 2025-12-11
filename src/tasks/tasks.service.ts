@@ -35,11 +35,24 @@ export class TasksService {
         .exec();
       return checkFound(updatedTask, `Task with ID ${id} not found`);
     } catch (error) {
-      throw handleMongoError(error);
+      if (error instanceof NotFoundException) {
+        throw error;
+      } else {
+        throw handleMongoError(error);
+      }
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} task`;
+  async remove(id: string) {
+    try {
+      const deletedTask = await this.taskModel.findByIdAndDelete(id).exec();
+      return checkFound(deletedTask, `Task with ID ${id} not found`);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      } else {
+        throw handleMongoError(error);
+      }
+    }
   }
 }
