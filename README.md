@@ -62,7 +62,7 @@ export class Task {
 - pnpm (`npm install -g pnpm`)
 - Docker y Docker Compose (Opcional, pero recomendado para la BD)
 
-### Configuración para probar localmente
+### Configuración para probar localmente 📄
 
 1.  **Instalar dependencias**:
 
@@ -70,8 +70,12 @@ export class Task {
     pnpm install
     ```
 
-2.  **Configurar Variables de Entorno**:
-    Asegúrate de tener un archivo `.env` en la raíz con la siguiente variable `MONGO_URL="mongodb://root:pass123@mongo:27017/mydb?authSource=admin"`).
+2.  **Configurar Variables de Entorno **:
+    Asegúrate de tener un archivo `.env` en la raíz con la siguiente variable
+
+- 👉 `MONGO_URL="mongodb://root:pass123@mongo:27017/mydb?authSource=admin"`
+
+- 👉 `FRONTEND_URL="http://localhost:5173"`).
 
 3.  **Construir y levantar contenedores:**
     Para levantar todo el entorno (Aplicación + Base de Datos) sin configurar nada manualmente:
