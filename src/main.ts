@@ -8,9 +8,9 @@ async function bootstrap() {
     new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }),
   );
   app.enableCors({
-    origin: process.env.FRONTEND_URL,
-    credentials: true,
+    origin: '*',
   });
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
